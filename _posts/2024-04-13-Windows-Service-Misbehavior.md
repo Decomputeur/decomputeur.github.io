@@ -2,7 +2,7 @@
 title: Windows Service Misbehaviour
 date: 2024-04-13 23:00:00 +0200
 categories: [PowerShell, N-Central]
-tags: [powershell, n-central, windows service]     # TAG names should always be lowercase
+tags: [powershell, n-central, windows service]
 ---
 When you are used to working with N-Central, some obvious flaw in N-Central can easily be missed.
 
