@@ -20,7 +20,7 @@ Based on my own observations, if typeId is 1, all systems are green, when it ret
 
 When you want to get the correct info from this json object, the code you need for this is as following:
 
-```PowerShell
+```powershell
 $BaseURI = "https://afasstatus.nl"
 $AfasData = (Invoke-WebRequest -Uri "$BaseURI/json").Content
 $AfasJSON = ConvertFrom-Json -InputObject $AfasData
