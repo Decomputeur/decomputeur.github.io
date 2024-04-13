@@ -12,6 +12,7 @@ The default Windows Service service check in N-Central is able to detect if a se
 This issue has created an issue for a customer because his process was stuck on stopping and we didn't notice it.
 
 Now, to fix this issue, we have the following simple Powershell Command to get all services that are currently not running or stopped:
+
 ```PowerShell
 Get-Service | Where-Object {$_.Status -ne 'Stopped' -and $_.Status -ne 'Running'}
 ```
@@ -19,6 +20,7 @@ Get-Service | Where-Object {$_.Status -ne 'Stopped' -and $_.Status -ne 'Running'
 
 When you run this simple one-liner, you get all services that are basically misbehaving and you would like to be reported on.
 To get this into a simple script for N-Central, you get the following:
+
 ```PowerShell
 $TwilightServiceNames = ""
 $TwilightServices = Get-Service | Where-Object {$_.Status -ne 'Stopped' -and $_.Status -ne 'Running'}
