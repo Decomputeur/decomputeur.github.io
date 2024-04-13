@@ -3,15 +3,14 @@ title: Windows Service Misbehaviour
 date: 2024-04-13 23:00:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, windows service]     # TAG names should always be lowercase
-image:
-  lqip: "/assets/images/services.png"
 ---
+
 # Windows Service Misbehavior
 
 When you are used to working with N-Central, some obvious flaw in N-Central can easily be missed.
 
 The default Windows Service service check in N-Central is able to detect if a service is starting, stopping or paused, but it is unable to report on it, as you can not set a threashold on it.
-![img-description](/assets/images/N-Central-Windows-Service.png)
+![N-Central Windows Service screenshot](/assets/images/N-Central-Windows-Service.png)
 This issue has created an issue for a customer because his process was stuck on stopping and we didn't notice it.
 
 Now, to fix this issue, we have the following simple Powershell Command to get all services that are currently not running or stopped:
