@@ -5,7 +5,7 @@ categories: [PowerShell, Azure]
 tags: [powershell, azure]
 ---
 > Visit this post regularly to check for updates.
-{: .prompt-info }
+{: .prompt-tip }
 
 If you get to a point to monitor Microsoft Azure items, you can connect to Azure using a username and password with MFA exclusion, but you will also need an app registration to connect with. Why not go the additional extra step and also generate a certificate, so that you can use this certificate to authenticate to the tenant in Azure. Below you can find a detailed explanation how to setup this app including it's certificate.
 
