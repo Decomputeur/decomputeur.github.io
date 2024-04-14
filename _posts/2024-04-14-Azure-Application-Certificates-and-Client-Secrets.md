@@ -19,7 +19,7 @@ Install-Module Microsoft.Graph.Applications
 
 Now Powershell will install all the dependant modules for us. That means it will install both Microsoft.Graph.Applications and Microsoft.Graph.Authentication for us in a single command.
 
-To connect to Azure using the authentication module we need to have the app setup as explained in [this post](posts/Azure-Monitoring-Requirements)
+To connect to Azure using the authentication module we need to have the app setup as explained in [this post]({{ site.baseurl }}{% link _posts/2024-04-14-Azure-Monitoring-Requirements.md %})
 
 Now that we have all data we need, we can start by creating a few variables and running the command to authenticate using the app we created in the article above.
 ```powershell
