@@ -3,6 +3,9 @@ title: Windows Service Misbehaviour
 date: 2024-04-13 23:00:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, windows service]
+image:
+  path: /assets/images/services.png
+  alt: Screenshot of windows services list.
 ---
 When you are used to working with N-Central, some obvious flaw in N-Central can easily be missed.
 
