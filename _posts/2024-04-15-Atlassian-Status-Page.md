@@ -4,7 +4,7 @@ date: 2024-04-15 09:30:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, status page]
 image:
-  path: /assets/images/logos/logo-gradient-blue-statuspage.svg
+  path: /assets/images/logos/logo-gradient-blue-statuspage.png
   alt: Microsoft Azure Logo.
 ---
 Many cloud providers will have a public status page to see their availability and scheduled maintenance.
