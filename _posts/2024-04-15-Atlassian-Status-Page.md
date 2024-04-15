@@ -1,6 +1,6 @@
 ---
 title: Atlassian Status Page
-date: 2024-04-14 12:00:00 +0200
+date: 2024-04-15 09:30:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, status page]
 ---
