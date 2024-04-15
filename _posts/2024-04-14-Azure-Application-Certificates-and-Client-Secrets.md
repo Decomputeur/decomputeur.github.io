@@ -4,7 +4,7 @@ date: 2024-04-14 23:00:00 +0200
 categories: [PowerShell, Azure]
 tags: [powershell, azure]
 image:
-  path: /assets/images/Microsoft_Azure-Logo.svg
+  path: /assets/images/logos/Microsoft_Azure-Logo.svg
   alt: Microsoft Azure Logo.
 ---
 One of the most important things to monitor in Microsoft Azure (for most customers) are the Application Certificates. This is because many connected Azure Application require such a certificate or client secret to communicate from the app to Azure (Entra) to authenticate, send mail, send teams message, read mail and do many other things via an Azure application.

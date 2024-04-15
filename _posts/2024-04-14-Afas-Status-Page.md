@@ -3,6 +3,9 @@ title: Afas Status Page
 date: 2024-04-14 01:00:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, status page]
+image:
+  path: /assets/images/logos/afas sw logo stapel RGB SVG.svg
+  alt: Afas Software Logo.
 ---
 When your company is a user of the software Afas, you want to get the status of it in your N-Central to more easily see if it is reporting any issues.
 Afas Software publishes it's status on the page [https://afasstatus.nl](https://afasstatus.nl), however if you look at that page, you can't see any way to subscribe by mail (except mention in an article on the help pages) or rss feed.

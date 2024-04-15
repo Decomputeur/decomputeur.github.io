@@ -3,6 +3,9 @@ title: Azure Monitoring Requirements
 date: 2024-04-14 12:00:00 +0200
 categories: [PowerShell, Azure]
 tags: [powershell, azure]
+image:
+  path: /assets/images/logos/Microsoft_Azure-Logo.svg
+  alt: Microsoft Azure Logo.
 ---
 > Visit this post regularly to check for updates.
 {: .prompt-tip }

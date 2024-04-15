@@ -3,6 +3,9 @@ title: Atlassian Status Page
 date: 2024-04-15 09:30:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, status page]
+image:
+  path: /assets/images/logos/atlassian-logo-gradient-horizontal-blue.svg
+  alt: Microsoft Azure Logo.
 ---
 Many cloud providers will have a public status page to see their availability and scheduled maintenance.
 One of those public status page providers is from Atlassian.
