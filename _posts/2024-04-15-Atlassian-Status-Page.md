@@ -5,7 +5,7 @@ categories: [PowerShell, N-Central]
 tags: [powershell, n-central, status page]
 image:
   path: /assets/images/logos/logo-gradient-blue-statuspage.png
-  alt: Microsoft Azure Logo.
+  alt: Atlassian Statuspage Logo.
 ---
 Many cloud providers will have a public status page to see their availability and scheduled maintenance.
 One of those public status page providers is from Atlassian.
