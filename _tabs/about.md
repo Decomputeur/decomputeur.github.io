@@ -4,7 +4,7 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-My real name is Chris Simon, currently living in the south of the Neterhlands and working for a rather large company in the IT industry.
+My real name is Chris Simon, currently living in the south of the Netherlands and working for a rather large company in the IT industry.
 
 Even though I still live with my father, which I love by the way, I have no girlfriend.
 I do however own a very nice Scottish Fold cat which i adore,
