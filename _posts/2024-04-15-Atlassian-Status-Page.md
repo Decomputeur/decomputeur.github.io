@@ -15,7 +15,7 @@ Examples of companies using Atlassian as status page are:
 - [Carbonite](https://status.carbonite.com/)
 - [Teamviewer](https://status.teamviewer.com/)
 
-Fortunatly, the Atlassian Status page has an easy api available. This api is [available here](https://metastatuspage.com/api).
+Fortunatly, the Atlassian Status page has an easy api available. This api is available [here](https://metastatuspage.com/api).
 
 the quick and dirty way to connect to this api is to append the URL of the statuspage with /api/v2/summary.json to get the summary information in a json formatted text.
 
