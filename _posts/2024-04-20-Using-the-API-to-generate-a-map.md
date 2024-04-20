@@ -125,15 +125,25 @@ Write-Progress -Activity "Processing Customer" -Completed
 ```
 
 As you can see on line 3 above, we create a progressbar to show our progress while executing our script. The last line marks the completion and removal of this progress bar.
+
 Line 7 is a special line. this encodes the name of the customer to be HTML safe. Using this, you can prevent that special characters break the HTML.
+
 Then on line 15, i replace every space with a + sign to make it possible to use as search parameter.
+
 On line 16, I get all customer properties set for this customer. This will include our new (and now still empty) Latitude and Longitude parameters.
+
 On line 19 we retrieve all active issues for this customer to be displayed on the map as well.
+
 Line 20 will do a comparison if the Street1 field is filled and latitude field isn't filled. Only if both of these conditions are met, then we will do a fetch of the street, city and country via the OpenStreetmap API on line 23.
+
 On line 24 we convert the result to an XML object.
+
 Line 28 will check if the searchresults.place is an array or not and if it is an array, we need to use the first item starting with id 0.
+
 On lines 33 and 34 or 41 and 42 we will write the fetched Latitude and Longitude to the N-Central custom properties we created at the start.
+
 Lines 50 to 62 we create a custom object containing all data we need later and on line 63 we add that custom object to our $CustomerArray.
+
 With line 63, we add 1 to our loop array to progress our progressbar we started on line 3.
 
 Now that we have an array named $CustomerArray which holds all data we need, we will process this to a large string to be used in the HTML of the page we create for the map.
@@ -162,8 +172,11 @@ foreach ($SingleCustomer in $CustomerArray)
 ```
 
 We start once again with the initialization of an empty variable named $CustomerPlots. This variable will hold all data we need to plot the customer on the map.
+
 We loop through each Customer in $CustomerArray, we check if the customer has a Latitude larger then 0 and isn't empty to only include customers for which the coordinates have been found using the OpenStreetMap API.
+
 Next we'll do some trickery. If the customerParentID is 50 we'll add it to the list of $CustomerPlots.
+
 If the CustomerParentID isn't 50, we need to loop through the entire array and get each site which is related to this CustomerID. Yes this isn't really efficient because it will loop many many times, even for customers which have already been added to the list, but it will group all customers and sites in the variable $CustomerPlots together and will make sure that each site will have the correct name included with each customer.
 
 The last part is to generate the HTML data and save it to a file.
@@ -250,7 +263,9 @@ $HTMLExport | Out-File "OpenStreetMap Customers.html"
 ```
 
 When you put this all together, you will get the result of the file you can download below.
+
 If you execute this script, you will get an interactive map where all customers are plotted onto an OpenStreetMap map.
+
 When you hover on a marker, you will see what customer it is including it's site name if it is a site of a customer.
 
 Download PS1 file: [GitHub](https://github.com/eagle00789/N-Central/blob/master/OpenStreetMap%20Customers/OpenStreetMap%20Customers.ps1)
