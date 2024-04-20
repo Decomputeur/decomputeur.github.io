@@ -15,6 +15,8 @@ In this article i'm going to show you how you can generate the map, like the one
 To prepare, we need to create 2 custom properties in N-Central. These custom properties will contain the latitude and longitude for the location of the customer. We do this to prevent an overload to the OpenStreetmap API each time we run this Powershell script.
 ![Custom Properties Latitude and Longitude](/assets/images/custom_properties_lat_lon.png)
 
+Next, make sure to have the Details tab of your customers and sites filled in with the correct address for that customer and/or site. If this isn't filled, it will not get included into the map.
+
 As usual, you need an API user with a generated API token with enough access to be able to write the latitude and longitude back to N-Central.
 
 First we need to check if the PS-NCentral module is installed and if not install then import the module for use.
