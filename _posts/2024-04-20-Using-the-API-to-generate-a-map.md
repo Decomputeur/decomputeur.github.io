@@ -70,7 +70,7 @@ To do this, we loop through every customer in the $Customers array.
 ```powershell
 foreach ($Customer in $Customers)
 {
-    Write-Progress -Activity "Processing Customer $i of $($Customers.Count)" -Status "Progress:" -PercentComplete ($i/$($Customers.Count)*100)
+    Write-Progress -Activity "Processing Customer $($Customers.IndexOf($Customer)) of $($Customers.Count)" -Status "Progress:" -PercentComplete ($Customers.IndexOf($Customer)/$($Customers.Count)*100)
     $lat = 0
     $lon = 0
     $CustomerName = [System.Net.WebUtility]::HtmlEncode($Customer.customername)
@@ -107,21 +107,21 @@ foreach ($Customer in $Customers)
         $CustomerCustomProperties.Latitude = $lat
         $CustomerCustomProperties.Longitude = $lon
     }
-    $item = New-Object PSObject
-    $item | Add-Member -type NoteProperty -Name 'CustomerID' -Value $Customer.customerid
-    $item | Add-Member -type NoteProperty -Name 'CustomerParentID' -Value $Customer.parentid
-    $item | Add-Member -type NoteProperty -Name 'CustomerName' -Value $CustomerName
-    $item | Add-Member -type NoteProperty -Name 'CustomerStreet1' -Value $CustomerStreet1Web
-    $item | Add-Member -type NoteProperty -Name 'CustomerStreet2' -Value $Customer.street2
-    $item | Add-Member -type NoteProperty -Name 'CustomerZipCode' -Value $Customer.postalcode
-    $item | Add-Member -type NoteProperty -Name 'CustomerCity' -Value $Customer.city
-    $item | Add-Member -type NoteProperty -Name 'CustomerStateProvince' -Value $Customer.stateprov
-    $item | Add-Member -type NoteProperty -Name 'CustomerCountry' -Value $Customer.county
-    $item | Add-Member -type NoteProperty -Name 'CustomerLat' -Value $CustomerCustomProperties.Latitude
-    $item | Add-Member -type NoteProperty -Name 'CustomerLon' -Value $CustomerCustomProperties.Longitude
-    $item | Add-Member -type NoteProperty -Name 'CustomerActiveIssues' -Value $CustomerActiveIssues
+    $item = [pscustomobject][ordered]@{
+        CustomerID = $Customer.customerid
+        CustomerParentID = $Customer.parentid
+        CustomerName = $CustomerName
+        CustomerStreet1 = $CustomerStreet1Web
+        CustomerStreet2 = $Customer.street2
+        CustomerZipCode = $Customer.postalcode
+        CustomerCity = $Customer.city
+        CustomerStateProvince = $Customer.stateprov
+        CustomerCountry = $Customer.county
+        CustomerLat = $CustomerCustomProperties.Latitude
+        CustomerLon = $CustomerCustomProperties.Longitude
+        CustomerActiveIssues = $CustomerActiveIssues
+    }
     $CustomerArray += $item
-    $i++
 }
 Write-Progress -Activity "Processing Customer" -Completed
 ```
@@ -142,44 +142,45 @@ Line 17 will check if the searchresults.place is an array or not and if it is an
 
 On lines 31 and 32 we will write the fetched Latitude and Longitude to the N-Central custom properties we created at the start if we enabled the variable to do so.
 
-Lines 39 to 52 we create a custom object containing all data we need later and on line 63 we add that custom object to our $CustomerArray.
-
-With line 63, we add 1 to our loop array to progress our progressbar we started on line 3.
+Lines 40 to 54 we create a custom object containing all data we need later and on line 63 we add that custom object to our $CustomerArray.
 
 The several `Write-Debug` commands used throughout the code above will only dispay it's output if you removed the comment for the `$DebugPreference = "continue"` line at the start.
 
 Now that we have an array named $CustomerArray which holds all data we need, we will process this to a large string to be used in the HTML of the page we create for the map.
 ```powershell
-$CustomerPlots = ""
+$PlotList = @()
 foreach ($SingleCustomer in $CustomerArray)
 {
-    if (($SingleCustomer.CustomerLat -ne 0) -and ($SingleCustomer.CustomerLat -notlike ""))
+    if ($SingleCustomer.CustomerLat)
     {
+        $PlotProps=@{}
+        $PlotProps.lon = $SingleCustomer.CustomerLon
+        $PlotProps.lat = $SingleCustomer.CustomerLat
+        $PlotProps.ActiveIssues = $SingleCustomer.CustomerActiveIssues
         if ($SingleCustomer.CustomerParentID -eq 50)
         {
-            $CustomerPlots += "{'lon': " + $SingleCustomer.CustomerLon + ", 'lat': " + $SingleCustomer.CustomerLat + ",'Customer': '" + $SingleCustomer.CustomerName + "', 'Location':'" + $SingleCustomer.CustomerName + "','ActiveIssues':'" + $SingleCustomer.CustomerActiveIssues + "'},"
+            $PlotProps.Customer = $SingleCustomer.CustomerName
+            $PlotProps.Location = ""
         }
         else
         {
-            for($i=0;$i-le $CustomerArray.length-1;$i++)
-            {
-                if ($CustomerArray[$i].CustomerID -eq $SingleCustomer.CustomerParentID)
-                {
-                    $CustomerPlots += "{'lon': " + $SingleCustomer.CustomerLon + ", 'lat': " + $SingleCustomer.CustomerLat + ",'Customer': '" + $CustomerArray[$i].CustomerName + "', 'Location':'" + $CustomerArray[$i].CustomerName + " - " + $SingleCustomer.CustomerName.Replace("'","\'") + "','ActiveIssues':'" + $SingleCustomer.CustomerActiveIssues + "'},"
-                }
-            }
+            $PlotProps.Customer = ($CustomerArray | Where-Object -Property CustomerID -EQ $SingleCustomer.CustomerParentID).CustomerName
+            $PlotProps.Location = $SingleCustomer.CustomerName
         }
+        $PlotList += [PSCustomObject]$PlotProps
     }
 }
 ```
 
-We start once again with the initialization of an empty variable named $CustomerPlots. This variable will hold all data we need to plot the customer on the map.
+We start once again with the initialization of an empty variable named $PlotList. This variable will hold all data we need to plot the customer on the map.
 
-We loop through each Customer in $CustomerArray, we check if the customer has a Latitude larger then 0 and isn't empty to only include customers for which the coordinates have been found using the OpenStreetMap API.
+We loop through each Customer in $CustomerArray, we check if the customer has a Latitude not equal to 0 and isn't empty to only include customers for which the coordinates have been found using the OpenStreetMap API.
 
-Next we'll do some trickery. If the customerParentID is 50 we'll add it to the list of $CustomerPlots.
+Next we create another array to hold our customer data which we use to plot the markers with and start by population the required fields.
 
-If the CustomerParentID isn't 50, we need to loop through the entire array and get each site which is related to this CustomerID. Yes this isn't really efficient because it will loop many many times, even for customers which have already been added to the list, but it will group all customers and sites in the variable $CustomerPlots together and will make sure that each site will have the correct name included with each customer.
+Then if the CustomerParentID is equal to 50, we only write the CustomerName and write an ampy value to the Location field.
+
+If the CustomerParentID isn't 50, we use a `Where-Object` function to locate the correct parent customer and get the CustomerName to use as CustomerName in the plot and use the normal CustomerName from the loop as the location, since we are currently on a site instead of a customer.
 
 The last part is to generate the HTML data and save it to a file.
 ```powershell
@@ -230,13 +231,7 @@ $HTMLExport = @"
 	let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 	map.addLayer(layer);
     // Put your point-definitions here
-    let markers = [
-"@
-
-$HTMLExport += $CustomerPlots.Substring(0,$CustomerPlots.Length-1)
-
-$HTMLExport += @"
-    ];
+    let markers = $(ConvertTo-Json $PlotList -Compress);
     let popupOption = {
       "closeButton":false
     }
@@ -263,6 +258,7 @@ $HTMLExport += @"
 
 $HTMLExport | Out-File "OpenStreetMap Customers.html"
 ```
+ On line 48 you find the small bit of powershell `$(ConvertTo-Json $PlotList -Compress)`. This will convert the $PlotList to a JSON Object to use as markers.
 
 When you put this all together, you will get the result of the file you can download below.
 
