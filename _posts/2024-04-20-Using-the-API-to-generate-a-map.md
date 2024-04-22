@@ -268,7 +268,8 @@ If you execute this script, you will get an interactive map where all customers 
 
 When you hover on a marker, you will see what customer it is including it's site name if it is a site of a customer.
 
+# Downloads
+Download PS1 file: [GitHub](https://github.com/eagle00789/N-Central/blob/master/OpenStreetMap%20Customers/OpenStreetMap%20Customers.ps1)
+
 # Updates
 - 22-04-2024 - Updated code and text (with some input from Adriaan Sluis)
-
-Download PS1 file: [GitHub](https://github.com/eagle00789/N-Central/blob/master/OpenStreetMap%20Customers/OpenStreetMap%20Customers.ps1)
