@@ -146,6 +146,8 @@ Lines 39 to 52 we create a custom object containing all data we need later and o
 
 With line 63, we add 1 to our loop array to progress our progressbar we started on line 3.
 
+The several `Write-Debug` commands used throughout the code above will only dispay it's output if you removed the comment for the `$DebugPreference = "continue"` line at the start.
+
 Now that we have an array named $CustomerArray which holds all data we need, we will process this to a large string to be used in the HTML of the page we create for the map.
 ```powershell
 $CustomerPlots = ""
