@@ -56,14 +56,12 @@ $Customers = Get-NCCustomerList -NcSession $NCSession
 ```
 
 Now we have a PowerShell variable named $Customers that will hold all our customers data.
-Let's initialize 2 variables for internal script usage.
+Let's initialize a variables for internal script usage.
 ```powershell
 $CustomerArray = @()
-$i = 1
 ```
 
-The first variable named $CustomerArray will contain the array with all customers in a nice orderly fashion.
-The second variable $i is used as a counter to display a progressbar during execution of the script.
+The variable named $CustomerArray will contain the array with all customers in a nice orderly fashion.
 
 We need to process the $Customers data into the $CustomerArray so that we have a nice base to generate the final array from which we need to display the markers from.
 To do this, we loop through every customer in the $Customers array.
@@ -258,7 +256,9 @@ $HTMLExport = @"
 
 $HTMLExport | Out-File "OpenStreetMap Customers.html"
 ```
- On line 48 you find the small bit of powershell `$(ConvertTo-Json $PlotList -Compress)`. This will convert the $PlotList to a JSON Object to use as markers.
+On line 48 you find the small bit of powershell `$(ConvertTo-Json $PlotList -Compress)`. This will convert the $PlotList to a JSON Object to use as markers.
+
+The last line is to export it all to a HTML file to display in your browser.
 
 When you put this all together, you will get the result of the file you can download below.
 
