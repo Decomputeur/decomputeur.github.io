@@ -19,7 +19,17 @@ Next, make sure to have the Details tab of your customers and sites filled in wi
 
 As usual, you need an API user with a generated API token with enough access to be able to write the latitude and longitude back to N-Central.
 
-First we need to check if the PS-NCentral module is installed and if not install then import the module for use.
+The first thing we start to do is create 2 variables for checking later output and writeback:
+
+```powershell
+# To enable debugging messages, remove the comment from the line below
+# $DebugPreference = "continue"
+
+# To enable writing of Latitude and Longitude back to N-Central, set value below to $true, otherwise to disable, set to $false
+$WriteBack = $true
+```
+
+Next we need to check if the PS-NCentral module is installed and if not install then import the module for use.
 ```powershell
 $CheckImportPSNCentral = Get-Module -ListAvailable -Name PS-NCentral
 if (!$CheckImportPSNCentral) {
@@ -34,7 +44,7 @@ else {
 Next, we'll setup 2 variables to hold the NCentral server URL and JWT Token.
 ```powershell
 $NCServer = 'https://yourncentralserver.domain.tld'
-$JWTToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+$JWTToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c' # fake JWT token
 ```
 
 now, let's connect to N-Central and get our customers data
@@ -63,62 +73,52 @@ foreach ($Customer in $Customers)
     Write-Progress -Activity "Processing Customer $i of $($Customers.Count)" -Status "Progress:" -PercentComplete ($i/$($Customers.Count)*100)
     $lat = 0
     $lon = 0
-    $CustomerID = $Customer.customerid
     $CustomerName = [System.Net.WebUtility]::HtmlEncode($Customer.customername)
-    $CustomerStreet1 = $Customer.street1
-    $CustomerStreet2 = $Customer.street2
-    $CustomerCity = $Customer.city
-    $CustomerStateProvince = $Customer.stateprov
-    $CustomerZipCode = $Customer.postalcode
-    $CustomerCountry = $Customer.county
-    $CustomerParentID = $Customer.parentid
-    $CustomerStreet1Web = $CustomerStreet1.Replace(" ", "+")
-    $CustomerCustomProperties = Get-NCCustomerPropertyList -CustomerIDs $CustomerID
-    $CustomerLat = $CustomerCustomProperties.Latitude
-    $CustomerLon = $CustomerCustomProperties.Longitude
-    $CustomerActiveIssues = (Get-NCActiveIssuesList -CustomerID $CustomerID).count
-    if (($CustomerStreet1Web -ne "") -and ($CustomerLat -eq ""))
+    $CustomerStreet1Web = [System.Net.WebUtility]::HtmlEncode($Customer.street1)
+    $CustomerCustomProperties = Get-NCCustomerPropertyList -CustomerIDs $Customer.customerid
+    $CustomerActiveIssues = (Get-NCActiveIssuesList -CustomerID $Customer.customerid).count
+    if (($CustomerStreet1Web -ne "") -and ($CustomerCustomProperties.Latitude -eq ""))
     {
-        $OpenStreetMapUri = "https://nominatim.openstreetmap.org/search?q=$CustomerStreet1Web+$CustomerCity+$CustomerCountry&format=xml"
+        $OpenStreetMapUri = ("https://nominatim.openstreetmap.org/search?q={0}+{1}+{2}&format=xml" -f $CustomerStreet1Web,$Customer.city,$Customer.county)
         $OpenStreetMapResult = Invoke-WebRequest -uri $OpenStreetMapUri
         $OpenStreetMapResultXML = [xml]$OpenStreetMapResult
-        $CustomerName
-        $OpenStreetMapUri
-        $Places = $OpenStreetMapResultXML.searchresults.place
+        write-debug $CustomerName
+        write-debug $OpenStreetMapUri
         if ($OpenStreetMapResultXML.searchresults.place -is [System.Array])
         {
-            write-host "Array"
+            write-debug "Array"
             $lat = $OpenStreetMapResultXML.searchresults.place[0].lat
             $lon = $OpenStreetMapResultXML.searchresults.place[0].lon
-            Set-NCCustomerProperty -CustomerIDs $CustomerID -PropertyLabel Latitude -PropertyValue $lat
-            Set-NCCustomerProperty -CustomerIDs $CustomerID -PropertyLabel Longitude -PropertyValue $lon
         }
         else
         {
-            write-host "NOT-Array"
+            write-debug "NOT-Array"
             $lat = $OpenStreetMapResultXML.searchresults.place.lat
             $lon = $OpenStreetMapResultXML.searchresults.place.lon
-            Set-NCCustomerProperty -CustomerIDs $CustomerID -PropertyLabel Latitude -PropertyValue $lat
-            Set-NCCustomerProperty -CustomerIDs $CustomerID -PropertyLabel Longitude -PropertyValue $lon
         }
-        $lat
-        $lon
-        write-host "--"
-        $CustomerLat = $lat
-        $CustomerLon = $lon
+        if ($WriteBack)
+        {
+            Set-NCCustomerProperty -CustomerIDs $Customer.customerid -PropertyLabel Latitude -PropertyValue $lat
+            Set-NCCustomerProperty -CustomerIDs $Customer.customerid -PropertyLabel Longitude -PropertyValue $lon
+        }
+        write-debug $lat
+        write-debug $lon
+        write-debug "--"
+        $CustomerCustomProperties.Latitude = $lat
+        $CustomerCustomProperties.Longitude = $lon
     }
     $item = New-Object PSObject
-    $item | Add-Member -type NoteProperty -Name 'CustomerID' -Value $CustomerID
-    $item | Add-Member -type NoteProperty -Name 'CustomerParentID' -Value $CustomerParentID
+    $item | Add-Member -type NoteProperty -Name 'CustomerID' -Value $Customer.customerid
+    $item | Add-Member -type NoteProperty -Name 'CustomerParentID' -Value $Customer.parentid
     $item | Add-Member -type NoteProperty -Name 'CustomerName' -Value $CustomerName
-    $item | Add-Member -type NoteProperty -Name 'CustomerStreet1' -Value $CustomerStreet1
-    $item | Add-Member -type NoteProperty -Name 'CustomerStreet2' -Value $CustomerStreet2
-    $item | Add-Member -type NoteProperty -Name 'CustomerZipCode' -Value $CustomerZipCode
-    $item | Add-Member -type NoteProperty -Name 'CustomerCity' -Value $CustomerCity
-    $item | Add-Member -type NoteProperty -Name 'CustomerStateProvince' -Value $CustomerStateProvince
-    $item | Add-Member -type NoteProperty -Name 'CustomerCountry' -Value $CustomerCountry
-    $item | Add-Member -type NoteProperty -Name 'CustomerLat' -Value $CustomerLat
-    $item | Add-Member -type NoteProperty -Name 'CustomerLon' -Value $CustomerLon
+    $item | Add-Member -type NoteProperty -Name 'CustomerStreet1' -Value $CustomerStreet1Web
+    $item | Add-Member -type NoteProperty -Name 'CustomerStreet2' -Value $Customer.street2
+    $item | Add-Member -type NoteProperty -Name 'CustomerZipCode' -Value $Customer.postalcode
+    $item | Add-Member -type NoteProperty -Name 'CustomerCity' -Value $Customer.city
+    $item | Add-Member -type NoteProperty -Name 'CustomerStateProvince' -Value $Customer.stateprov
+    $item | Add-Member -type NoteProperty -Name 'CustomerCountry' -Value $Customer.county
+    $item | Add-Member -type NoteProperty -Name 'CustomerLat' -Value $CustomerCustomProperties.Latitude
+    $item | Add-Member -type NoteProperty -Name 'CustomerLon' -Value $CustomerCustomProperties.Longitude
     $item | Add-Member -type NoteProperty -Name 'CustomerActiveIssues' -Value $CustomerActiveIssues
     $CustomerArray += $item
     $i++
@@ -128,23 +128,21 @@ Write-Progress -Activity "Processing Customer" -Completed
 
 As you can see on line 3 above, we create a progressbar to show our progress while executing our script. The last line marks the completion and removal of this progress bar.
 
-Line 7 is a special line. this encodes the name of the customer to be HTML safe. Using this, you can prevent that special characters break the HTML.
+Line 6 and 7 are special lines. This encodes the name of the customer and the Street1 to be HTML safe. Using this, you can prevent that special characters break the HTML.
 
-Then on line 15, i replace every space with a + sign to make it possible to use as search parameter.
+On line 8, I get all customer properties set for this customer. This will include our new (and now still empty) Latitude and Longitude parameters.
 
-On line 16, I get all customer properties set for this customer. This will include our new (and now still empty) Latitude and Longitude parameters.
+On line 9 we retrieve all active issues for this customer to be displayed on the map as well.
 
-On line 19 we retrieve all active issues for this customer to be displayed on the map as well.
+Line 10 will do a comparison if the Street1 field is filled and latitude field isn't filled. Only if both of these conditions are met, then we will do a fetch of the street, city and country via the OpenStreetmap API on line 23.
 
-Line 20 will do a comparison if the Street1 field is filled and latitude field isn't filled. Only if both of these conditions are met, then we will do a fetch of the street, city and country via the OpenStreetmap API on line 23.
+On line 14 we convert the result from OpenStreetMap to an XML object.
 
-On line 24 we convert the result to an XML object.
+Line 17 will check if the searchresults.place is an array or not and if it is an array, we need to use the first item starting with id 0.
 
-Line 28 will check if the searchresults.place is an array or not and if it is an array, we need to use the first item starting with id 0.
+On lines 31 and 32 we will write the fetched Latitude and Longitude to the N-Central custom properties we created at the start if we enabled the variable to do so.
 
-On lines 33 and 34 or 41 and 42 we will write the fetched Latitude and Longitude to the N-Central custom properties we created at the start.
-
-Lines 50 to 62 we create a custom object containing all data we need later and on line 63 we add that custom object to our $CustomerArray.
+Lines 39 to 52 we create a custom object containing all data we need later and on line 63 we add that custom object to our $CustomerArray.
 
 With line 63, we add 1 to our loop array to progress our progressbar we started on line 3.
 
@@ -187,7 +185,7 @@ $HTMLExport = @"
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Detron N-Central Customer Map</title>
+  <title>N-Central Customer Map</title>
   <style>
 	*{
 		margin: 0;
@@ -269,5 +267,8 @@ When you put this all together, you will get the result of the file you can down
 If you execute this script, you will get an interactive map where all customers are plotted onto an OpenStreetMap map.
 
 When you hover on a marker, you will see what customer it is including it's site name if it is a site of a customer.
+
+# Updates
+- 22-04-2024 - Updated code and text (with some input from Adriaan Sluis)
 
 Download PS1 file: [GitHub](https://github.com/eagle00789/N-Central/blob/master/OpenStreetMap%20Customers/OpenStreetMap%20Customers.ps1)
