@@ -1,6 +1,6 @@
 ---
 title: Get Asset Discoveryjobs
-date: 2024-04-26 17:00:00 +0200
+date: 2024-04-26 16:50:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, api, soap]
 ---
