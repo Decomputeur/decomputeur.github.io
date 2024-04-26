@@ -270,4 +270,4 @@ When you hover on a marker, you will see what customer it is including it's site
 Download PS1 file: [GitHub](https://github.com/eagle00789/N-Central/blob/master/OpenStreetMap%20Customers/OpenStreetMap%20Customers.ps1)
 
 # Updates
-- 22-04-2024 - Updated code and text (with some input from Adriaan Sluis)
+- 22-04-2024 - Updated code and text (with input from Adriaan Sluis and Joost de Heer)
