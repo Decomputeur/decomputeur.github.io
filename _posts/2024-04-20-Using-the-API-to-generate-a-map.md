@@ -2,7 +2,7 @@
 title: Using the API to generate a map
 date: 2024-04-20 22:00:00 +0200
 categories: [PowerShell, N-Central]
-tags: [powershell, n-central, api]
+tags: [powershell, n-central, api, soap]
 image:
   path: /assets/images/map.png
   alt: A map with pins.
