@@ -4,7 +4,7 @@ date: 2024-04-27 20:23:00 +0200
 categories: [PowerShell, N-Central]
 tags: [powershell, n-central, status page]
 image:
-  path: /assets/images/logos/cronitor.svg
+  path: /assets/images/logos/cronitor.png
   alt: Cronitor Statuspage Logo.
 ---
 Many cloud providers will have a public status page to see their availability and scheduled maintenance.
