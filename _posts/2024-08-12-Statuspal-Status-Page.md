@@ -17,7 +17,7 @@ If you don't have a subscribe button, view the page source. The first link eleme
 
 Now that you have made sure that you are viewing a page using statuspal.io, you would like to monitor this page.
 However, currently statuspal doesn't provide all the necessary information you need to monitor the status of the service you would like.
-To get the required subdomain id, please send then an e-mail message in which you request the subdomain id for the specific page you would like to monitor (this will change in the future)
+To get the required subdomain id, please send then an e-mail message at [statuspal](mailto:contact@statuspal.io) in which you request the subdomain id for the specific page you would like to monitor (this will change in the future)
 
 As soon as you have the subdomain id, we can start monitoring the correct site.
 Statuspal provides a public api for which we need the subdomain id, we requesed above, and browse to the following page:
