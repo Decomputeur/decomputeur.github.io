@@ -7,6 +7,9 @@ image:
   path: /assets/images/logos/afas sw logo stapel RGB SVG.svg
   alt: Afas Software Logo.
 ---
+> Afas has replaced it's statuspage with Statuspal. See [Statuspal](https://www.decomputeur.nl/posts/Statuspal-Status-Page/) for more information about adding this to N-Central.
+{: .prompt-warning }
+
 When your company is a user of the software Afas, you want to get the status of it in your N-Central to more easily see if it is reporting any issues.
 Afas Software publishes it's status on the page [https://afasstatus.nl](https://afasstatus.nl), however if you look at that page, you can't see any way to subscribe by mail (except mention in an article on the help pages) or rss feed.
 
@@ -36,8 +39,6 @@ else {
     $URL = "$BaseURI/details/event:$($AfasJSON.eventId)"
 }
 ```
-> Afas has replaced it's statuspage with Statuspal. See [Statuspal](https://www.decomputeur.nl/posts/Statuspal-Status-Page/) for more information about adding this to N-Central.
-{: .prompt-warning }
 
 As you can see in the script above, i even know (based on my own observations of the workings when an outage, maintenance or warning is active) the details can be found on the URL that is created in the else section of the if statement.
 
