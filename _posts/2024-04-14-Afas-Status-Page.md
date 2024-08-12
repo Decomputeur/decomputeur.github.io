@@ -36,6 +36,8 @@ else {
     $URL = "$BaseURI/details/event:$($AfasJSON.eventId)"
 }
 ```
+> Afas has replaced it's statuspage with Statuspal. See [Statuspal](https://www.decomputeur.nl/posts/Statuspal-Status-Page/) for more information about adding this to N-Central.
+{: .prompt-warning }
 
 As you can see in the script above, i even know (based on my own observations of the workings when an outage, maintenance or warning is active) the details can be found on the URL that is created in the else section of the if statement.
 
