@@ -9,7 +9,7 @@ image:
 ---
 Many cloud providers will have a public status page to see their availability and scheduled maintenance.
 One of those public status page providers is from Statuspal.
-An example of a company using Cronitor as status page is [Interconnect](https://status.interconnect-noc.nl/)
+An example of a company using Statuspal as status page is [Interconnect](https://status.interconnect-noc.nl/)
 
 To see if a status page is using Statuspal, just click on the subscribe button in the top right corner and look at the text below the Subscribe button.
 That should mention Statuspal.
