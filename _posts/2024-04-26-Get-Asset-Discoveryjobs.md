@@ -84,3 +84,5 @@ Export-Excel -Path ".\Exports\DiscoveryJobs.xlsx" -WorksheetName (Get-Date -Form
 
 We can reuse the same excel file, since we create a new worksheet with the current date and time (in EU formatting).
 We make the columns Autosizing, we enable the AutoFilter, we Freeze the top row, we disable number conversion to prevent converting some values from a number to a date and we add the Medium10 styole to our table.
+
+Download PS1 file: [GitHub](https://github.com/eagle00789/N-Central/blob/master/SOAP%20API%20Get%20Discovery%20Jobs/API%20Get%20Discovery%20Jobs.ps1)
