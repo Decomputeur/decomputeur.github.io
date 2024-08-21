@@ -11,6 +11,10 @@ Many cloud providers will have a public status page to see their availability an
 One of those public status page providers is from Statuspal.
 An example of a company using Statuspal as status page is [Interconnect](https://status.interconnect-noc.nl/)
 
+Known pages are:
+- [Interconnect](https://status.interconnect-noc.nl/) with subdomain ic-noc
+- [Afas](https://www.afasstatus.nl/) with subdomain afas
+
 To see if a status page is using Statuspal, just click on the subscribe button in the top right corner and look at the text below the Subscribe button.
 That should mention Statuspal.
 If you don't have a subscribe button, view the page source. The first link element you see, should point to statuspal.io
