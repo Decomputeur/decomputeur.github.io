@@ -74,3 +74,9 @@ Export-Certificate -Cert $cert -FilePath "C:\Temp\$certname.cer"
     - **Azure Client ID**: Go back to Azure and go to the tab Overview of the application **NCentral Azure Monitoring**. At the top you will find the **Application (client) ID**. Move the mouse over the Application (client) ID to make a copy button visible. Click the copy button and paste the value in the **Azure Client ID** field in NCentral.
     - **Azure Tenant ID**: Go back to Azure and go to the tab Overview of the application **NCentral Azure Monitoring**. At the top you will find the **Directory (tenant) ID**. Move the mouse over the **Directory (tenant) ID** to make a copy button visible. Click the copy button and paste the value in the **Azure Tenant ID** field in NCentral.
 30. Hit Save at the bottom left to save the now filled custom properties
+31. Open an administrative powershell session.
+32. Execute the following commands to install all the required powershell modules:
+```powershell
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Install-Module Microsoft.Graph.Authentication, Microsoft.Graph.Applications, Microsoft.Graph.Reports, Microsoft.Graph.Beta.Applications, Microsoft.Graph.Beta.Devicemanagement.Enrollment, Microsoft.Graph.Identity.SignIns, az.storage, AzureAD, Microsoft.Graph.Groups, Microsoft.Graph.DeviceManagement.Administration, Microsoft.Graph.Devices.CorporateManagement, Microsoft.Graph.Devices.ServiceAnnouncement
+```
