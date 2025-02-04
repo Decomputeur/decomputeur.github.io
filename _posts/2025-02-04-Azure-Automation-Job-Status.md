@@ -1,6 +1,6 @@
 ---
 title: Azure Automation Job Status
-date: 2024-02-04 14:00:00 +0200
+date: 2025-02-04 14:00:00 +0200
 categories: [PowerShell, Azure]
 tags: [powershell, azure]
 image:
