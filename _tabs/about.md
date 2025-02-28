@@ -13,3 +13,6 @@ The company I work for at this moment is using N-Able N-Central as it's MSP RMM 
 Most of the scripts that will be published and discussed here, are written to aleviate my work when trying to do anything that can be done using PowerShell in N-Central.
 
 For the most scripts, I will try to explain as much as possible and my reasoning how I get to the final version of the script.
+If, for any reason, you have a question about one of the scripts, just post a message using the form below the post to start a healthy discussion for anything related to that script.
+
+In the future, i hope to also add other related items such as Filters, Rules and Service Templates in a single download, so that you can more easily monitor your servers and related services.
